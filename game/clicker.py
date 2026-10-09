@@ -1,66 +1,46 @@
-"""Модуль с интерфейсом и реализацией кликера"""
+"""Модуль с интерфейсом и реализацией кликера."""
 
 from abc import ABC, abstractmethod
 
-from .exceptions import NotEnoughMoney
-
 
 class AbstractClicker(ABC):
-    """Интерфейс для кликера"""
+    """Интерфейс для кликера."""
 
     @abstractmethod
     def __init__(self) -> None:
-        """Абстрактный метод инициализации"""
+        """Инициализирует кликер."""
         raise NotImplementedError
 
     @abstractmethod
     def click(self) -> None:
-        """Абстрактный метод клика для накапливания монет"""
+        """Совершает клик, накапливая доход."""
         raise NotImplementedError
 
     @property
     @abstractmethod
     def income_per_click(self) -> int:
-        """Абстрактное свойство для доступа к количеству монет за клик"""
+        """Возвращает количество монет за один клик."""
         raise NotImplementedError
 
 
 class Clicker(AbstractClicker):
-    """Реализация кликера с накоплением монет"""
+    """Реализация кликера с накоплением монет."""
 
     def __init__(
-        self, income_per_click: int = 1, initial_coins: int = 0
+        self,
+        income_per_click: int = 1,
     ) -> None:
         """
-        Инициализация кликера
+        Инициализация кликера.
 
         :param income_per_click: количество монет за один клик
-        :param initial_coins: начальное количество монет
         """
         self._income_per_click = income_per_click
-        self._coins = initial_coins
 
     def click(self) -> None:
-        """Клик для накапливания монет"""
-        self._coins += self._income_per_click
+        """Клик для накапливания монет."""
 
     @property
     def income_per_click(self) -> int:
-        """Количество монет за клик"""
+        """Возвращает количество монет за клик."""
         return self._income_per_click
-
-    @property
-    def coins(self) -> int:
-        """Текущее количество монет"""
-        return self._coins
-
-    def spend(self, amount: int) -> None:
-        """
-        Потратить монеты
-
-        :param amount: сумма для списания
-        :raises NotEnoughMoney: если не хватает монет
-        """
-        if self._coins < amount:
-            raise NotEnoughMoney("Недостаточно монет для покупки")
-        self._coins -= amount
